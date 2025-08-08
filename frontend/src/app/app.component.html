@@ -1,4 +1,10 @@
-<app-header>
+<ng-container *ngIf="isAuthRoute$ | async; else mainLayout">
   <router-outlet></router-outlet>
-</app-header>
-<app-footer></app-footer>
+</ng-container>
+
+<ng-template #mainLayout>
+  <app-header>
+    <router-outlet></router-outlet>
+  </app-header>
+  <app-footer></app-footer>
+</ng-template>

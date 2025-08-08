@@ -19,8 +19,25 @@
 
   <section class="pokemon-section">
     <h2>Pokémon Collection</h2>
-    <div class="pokemon-grid">
-      <app-pokemon-card *ngFor="let p of pokemons" [pokemon]="p"></app-pokemon-card>
+    
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="loader"></div>
+      <p>Loading Pokémon...</p>
+    </div>
+
+    <div *ngIf="error" class="error-state">
+      <p>{{ error }}</p>
+      <button (click)="loadPokemons()" class="retry-button">Try Again</button>
+    </div>
+
+    <div *ngIf="!isLoading && !error" class="pokemon-grid">
+      <app-pokemon-card
+        *ngFor="let p of pokemons"
+        [pokemon]="p"
+        [showFavorite]="true"
+        (click)="openPokemonDetails(p)"
+        (favoriteToggle)="toggleFavorite(p)">
+      </app-pokemon-card>
     </div>
   </section>
 </div>

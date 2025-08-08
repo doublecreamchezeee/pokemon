@@ -1,5 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+interface Pokemon {
+  id: number;
+  name: string;
+  image: string;
+  types?: string[];
+  speed?: number;
+}
 
 @Component({
   selector: 'app-pokemon-card',
@@ -9,5 +17,12 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./pokemon-card.component.scss']
 })
 export class PokemonCardComponent {
-  @Input() pokemon!: { id: number; name: string; image: string };
+  @Input() pokemon!: Pokemon;
+  @Input() showFavorite: boolean = false;
+  @Output() favoriteToggle = new EventEmitter<void>();
+
+  onFavoriteClick(event: Event): void {
+    event.stopPropagation();
+    this.favoriteToggle.emit();
+  }
 }

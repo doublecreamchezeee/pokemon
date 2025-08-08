@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .home-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -97,6 +99,60 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.loading-state, .error-state {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  margin: 1rem 0;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--primary-color);
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-state {
+  color: #dc3545;
+
+  p {
+    margin-bottom: 1rem;
+  }
+}
+
+.retry-button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: color.adjust(#1976d2, $lightness: -10%);
   }
 }
 

@@ -1,0 +1,26 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
+  <h2>
+    <span style="vertical-align: middle; margin-right: 8px;">
+      <mat-icon color="primary">person_add</mat-icon>
+    </span>
+    Sign Up
+  </h2>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Username</mat-label>
+    <input matInput formControlName="username" required autocomplete="username">
+    <mat-error *ngIf="form.get('username')?.hasError('required')">Username is required</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Password</mat-label>
+    <input matInput type="password" formControlName="password" required autocomplete="new-password">
+    <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
+    <mat-error *ngIf="form.get('password')?.hasError('minlength')">Min 6 characters</mat-error>
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit" [disabled]="loading || form.invalid">
+    <mat-icon style="vertical-align: middle; margin-right: 4px;">person_add</mat-icon>
+    Sign Up
+  </button>
+  <div class="switch-link">
+    <a routerLink="/login">Already have an account? <b>Login</b></a>
+  </div>
+</form>

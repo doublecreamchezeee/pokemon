@@ -1,10 +1,26 @@
-<div class="carousel-container">
-  <div class="carousel">
-    <ng-container *ngFor="let video of youtubeVideos">
-      <iframe width="280" height="158" [src]="video | safeUrl" frameborder="0" allowfullscreen></iframe>
-    </ng-container>
-  </div>
-</div>
-<div class="pokemon-grid">
-  <app-pokemon-card *ngFor="let p of pokemons" [pokemon]="p"></app-pokemon-card>
+<div class="home-container">
+  <section class="hero-section">
+    <h1>Welcome to the World of Pokémon</h1>
+    <p>Discover and explore your favorite Pokémon</p>
+  </section>
+
+  <section class="featured-section">
+    <h2>Featured Videos</h2>
+    <div class="carousel-container">
+      <div class="carousel">
+        <ng-container *ngFor="let video of youtubeVideos">
+          <div class="video-wrapper">
+            <iframe [src]="video | safeUrl" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </section>
+
+  <section class="pokemon-section">
+    <h2>Pokémon Collection</h2>
+    <div class="pokemon-grid">
+      <app-pokemon-card *ngFor="let p of pokemons" [pokemon]="p"></app-pokemon-card>
+    </div>
+  </section>
 </div>

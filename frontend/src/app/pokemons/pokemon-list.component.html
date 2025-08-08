@@ -40,7 +40,8 @@
   <div *ngIf="!isLoading && !error" class="pokemon-grid">
     <app-pokemon-card
       *ngFor="let pokemon of filteredPokemons"
-      [pokemon]="pokemon">
+      [pokemon]="pokemon"
+      (click)="openPokemonDetails(pokemon)">
     </app-pokemon-card>
   </div>
 </div>

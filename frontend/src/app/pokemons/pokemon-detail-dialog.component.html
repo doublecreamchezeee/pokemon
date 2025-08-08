@@ -1,0 +1,93 @@
+<div class="dialog-container">
+  <ng-container *ngIf="pokemon$ | async as pokemon; else loading">
+    <div class="pokemon-header">
+      <h2>{{ pokemon.name }}</h2>
+      <span class="pokemon-id">#{{ pokemon.id.toString().padStart(3, '0') }}</span>
+    </div>
+
+    <div class="pokemon-image">
+      <img [src]="pokemon.image" [alt]="pokemon.name">
+    </div>
+
+    <div class="pokemon-types">
+      <span 
+        *ngFor="let type of pokemon.types" 
+        class="type-badge"
+        [attr.data-type]="type.toLowerCase()">
+        {{ type }}
+      </span>
+    </div>
+
+    <div class="pokemon-info">
+      <div class="info-row" *ngIf="pokemon.height">
+        <span class="label">Height:</span>
+        <span>{{ pokemon.height }} m</span>
+      </div>
+      <div class="info-row" *ngIf="pokemon.weight">
+        <span class="label">Weight:</span>
+        <span>{{ pokemon.weight }} kg</span>
+      </div>
+    </div>
+
+    <div class="pokemon-description" *ngIf="pokemon.description">
+      <p>{{ pokemon.description }}</p>
+    </div>
+
+    <div class="stats-container">
+      <h3>Base Stats</h3>
+      <div class="stat-row">
+        <span class="stat-label">HP</span>
+        <div class="stat-bar-container">
+          <div class="stat-bar" [style.width.%]="(pokemon.stats.hp / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.stats.hp }}</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Attack</span>
+        <div class="stat-bar-container">
+          <div class="stat-bar" [style.width.%]="(pokemon.stats.attack / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.stats.attack }}</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Defense</span>
+        <div class="stat-bar-container">
+          <div class="stat-bar" [style.width.%]="(pokemon.stats.defense / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.stats.defense }}</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Sp. Atk</span>
+        <div class="stat-bar-container">
+          <div class="stat-bar" [style.width.%]="(pokemon.stats.specialAttack / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.stats.specialAttack }}</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Sp. Def</span>
+        <div class="stat-bar-container">
+          <div class="stat-bar" [style.width.%]="(pokemon.stats.specialDefense / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.stats.specialDefense }}</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Speed</span>
+        <div class="stat-bar-container">
+          <div class="stat-bar" [style.width.%]="(pokemon.stats.speed / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.stats.speed }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog-actions">
+      <button mat-button (click)="close()">Close</button>
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="loading-container">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Loading Pokémon details...</p>
+    </div>
+  </ng-template>
+</div>

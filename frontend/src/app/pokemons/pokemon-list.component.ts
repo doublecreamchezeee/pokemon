@@ -6,11 +6,13 @@ import { PokemonCardComponent } from '../components/pokemon-card/pokemon-card.co
 import { catchError, finalize, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { Subject } from 'rxjs';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { PokemonDetailDialogComponent } from './pokemon-detail-dialog.component';
 
 @Component({
   selector: 'app-pokemon-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PokemonCardComponent],
+  imports: [CommonModule, ReactiveFormsModule, PokemonCardComponent, MatDialogModule],
   templateUrl: './pokemon-list.component.html',
   styleUrls: ['./pokemon-list.component.scss']
 })
@@ -24,7 +26,10 @@ export class PokemonListComponent implements OnInit {
   searchControl = new FormControl('');
   private destroy$ = new Subject<void>();
 
-  constructor(private pokemonService: PokemonService) {}
+  constructor(
+    private pokemonService: PokemonService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.loadPokemons();
@@ -63,6 +68,15 @@ export class PokemonListComponent implements OnInit {
       console.log('Selected file:', this.selectedFile.name);
       // TODO: Implement CSV upload
     }
+  }
+
+  openPokemonDetails(pokemon: Pokemon): void {
+    this.dialog.open(PokemonDetailDialogComponent, {
+      data: { id: pokemon.id },
+      width: '600px',
+      maxHeight: '90vh',
+      panelClass: 'pokemon-detail-dialog'
+    });
   }
 
   onSearch() {

@@ -12,6 +12,40 @@
   position: relative;
   height: 100%;
 
+  .favorite-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    border-radius: 50%;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+      transform: scale(1.1);
+    }
+
+    mat-icon {
+      transition: all 0.2s ease;
+      width: 24px;
+      height: 24px;
+      font-size: 24px;
+    }
+
+    &.active {
+      mat-icon {
+        color: #ff3b30;
+      }
+    }
+  }
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 12px -1px rgba(0, 0, 0, 0.15);

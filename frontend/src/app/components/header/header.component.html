@@ -1,0 +1,22 @@
+<mat-toolbar color="primary" class="mat-elevation-z4">
+  <button mat-icon-button (click)="toggleSidenav()" class="hide-desktop">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="app-title">Inipod App</span>
+  <span class="spacer"></span>
+  <ng-container *ngIf="isAuthenticated$ | async; else loginBtn">
+    <button mat-button (click)="logout()">Logout</button>
+  </ng-container>
+  <ng-template #loginBtn>
+    <a mat-button routerLink="/login">Login</a>
+  </ng-template>
+</mat-toolbar>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav [(opened)]="sidenavOpened" mode="over" class="hide-desktop">
+    <a mat-list-item routerLink="/pokemons" (click)="toggleSidenav()">Pokemons</a>
+    <a mat-list-item routerLink="/signup" (click)="toggleSidenav()">Signup</a>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <!-- Main content will be projected here -->
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { AuthStateService, AuthUser } from './auth-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -12,13 +13,16 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authState: AuthStateService
   ) {}
 
   login(credentials: { username: string; password: string }): Observable<any> {
     return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials).pipe(
       tap(res => {
-        localStorage.setItem('auth_token', res.token);
+        // Simulate user object, adapt as needed
+        const user: AuthUser = { username: credentials.username };
+        this.authState.login(user, res.token);
         this.router.navigate(['/']);
       }),
       catchError(err => {
@@ -31,7 +35,8 @@ export class AuthService {
   signup(data: { username: string; password: string }): Observable<any> {
     return this.http.post<{ token: string }>(`${this.apiUrl}/signup`, data).pipe(
       tap(res => {
-        localStorage.setItem('auth_token', res.token);
+        const user: AuthUser = { username: data.username };
+        this.authState.login(user, res.token);
         this.router.navigate(['/']);
       }),
       catchError(err => {
@@ -42,7 +47,7 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('auth_token');
+    this.authState.logout();
     this.router.navigate(['/login']);
   }
 }

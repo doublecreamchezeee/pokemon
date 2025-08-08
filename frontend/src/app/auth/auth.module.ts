@@ -7,6 +7,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { SignupComponent } from './signup/signup.component';
     RouterModule,
     LoginComponent,
     SignupComponent
-  ]
+  ],
+  providers: [AuthGuard]
 })
 export class AuthModule {}

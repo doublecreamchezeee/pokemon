@@ -1,0 +1,27 @@
+.mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.app-title {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+.spacer {
+  flex: 1 1 auto;
+}
+.sidenav-container {
+  display: none;
+}
+.hide-desktop {
+  display: none;
+}
+@media (max-width: 768px) {
+  .hide-desktop {
+    display: inline-flex;
+  }
+  .sidenav-container {
+    display: block;
+    height: 0;
+  }
+}

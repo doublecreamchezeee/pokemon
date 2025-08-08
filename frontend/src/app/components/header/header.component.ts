@@ -1,32 +1,54 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { AuthStateService } from '../../services/auth-state.service';
+import { Component, OnInit } from '@angular/core';
+import { AuthStateService, AuthUser } from '../../services/auth-state.service';
 import { Observable } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { map, shareReplay } from 'rxjs/operators';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, CommonModule],
+  imports: [
+    RouterModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatListModule,
+    CommonModule
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   isAuthenticated$: Observable<boolean>;
-  sidenavOpened = false;
+  currentUser$: Observable<AuthUser | null>;
+  isSmallScreen = false;
 
-  constructor(private authState: AuthStateService) {
+  constructor(
+    private authState: AuthStateService,
+    private breakpointObserver: BreakpointObserver
+  ) {
     this.isAuthenticated$ = this.authState.isAuthenticated$;
+    this.currentUser$ = this.authState.currentUser$;
   }
 
-  toggleSidenav() {
-    this.sidenavOpened = !this.sidenavOpened;
+  ngOnInit() {
+    this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.Tablet]).pipe(
+      map(result => result.matches),
+      shareReplay()
+    ).subscribe(isSmall => this.isSmallScreen = isSmall);
   }
 
   logout() {
     this.authState.logout();
   }
+
+  onSidenavClose() {}
 }

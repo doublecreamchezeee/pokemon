@@ -1,0 +1,10 @@
+<div class="carousel-container">
+  <div class="carousel">
+    <ng-container *ngFor="let video of youtubeVideos">
+      <iframe width="280" height="158" [src]="video | safeUrl" frameborder="0" allowfullscreen></iframe>
+    </ng-container>
+  </div>
+</div>
+<div class="pokemon-grid">
+  <app-pokemon-card *ngFor="let p of pokemons" [pokemon]="p"></app-pokemon-card>
+</div>

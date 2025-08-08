@@ -11,17 +11,20 @@
   flex: 1 1 auto;
 }
 .sidenav-container {
-  display: none;
+  height: 100vh;
+}
+.mat-sidenav {
+  width: 220px;
 }
 .hide-desktop {
   display: none;
 }
+.username {
+  margin-left: 1rem;
+  font-weight: 500;
+}
 @media (max-width: 768px) {
   .hide-desktop {
     display: inline-flex;
-  }
-  .sidenav-container {
-    display: block;
-    height: 0;
   }
 }

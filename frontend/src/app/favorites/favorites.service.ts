@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Pokemon } from '../pokemons/pokemon.service';
+import { Pokemon } from '../pokemons/pokemon.interface';
+import { environment } from '@environments/environment';
 
 export interface FavoriteResponse {
-  data: Pokemon[];
+  items: Pokemon[];
   total: number;
 }
 
@@ -12,7 +13,7 @@ export interface FavoriteResponse {
   providedIn: 'root'
 })
 export class FavoritesService {
-  private apiUrl = '/api';
+  private apiUrl = `${environment.apiUrl}/api`;
 
   constructor(private http: HttpClient) {}
 

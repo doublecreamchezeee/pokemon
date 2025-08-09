@@ -12,14 +12,6 @@ export interface Pokemon {
   speed: number;
   generation: number;
   legendary: boolean;
-  ytUrl?: string;
   image: string;
-}
-
-export interface PaginatedPokemonResponse {
-  items: Pokemon[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
+  ytUrl?: string;
 }

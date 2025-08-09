@@ -1,4 +1,4 @@
-export interface Pokemon {
+export class PokemonResponse {
   id: number;
   name: string;
   type1: string;
@@ -7,17 +7,17 @@ export interface Pokemon {
   hp: number;
   attack: number;
   defense: number;
-  spAtk: number;
-  spDef: number;
+  spAttack: number;
+  spDefense: number;
   speed: number;
   generation: number;
   legendary: boolean;
-  ytUrl?: string;
-  image: string;
+  image: string | null;
+  ytbUrl: string | null;
 }
 
-export interface PaginatedPokemonResponse {
-  items: Pokemon[];
+export class PaginatedPokemonResponse {
+  items: PokemonResponse[];
   total: number;
   page: number;
   limit: number;

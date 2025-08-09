@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PokemonCardComponent } from '../components/pokemon-card/pokemon-card.component';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { SafeUrlPipe } from '../pipes/safe-url.pipe';
+
 import { PokemonService, Pokemon } from '../services/pokemon.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -10,7 +10,7 @@ import { of } from 'rxjs';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, PokemonCardComponent, MatGridListModule, SafeUrlPipe],
+  imports: [CommonModule, PokemonCardComponent, MatGridListModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
@@ -40,13 +40,13 @@ export class HomeComponent implements OnInit {
     this.pokemonService.getPokemons(1, 10).pipe(
       catchError(error => {
         this.error = 'Failed to load Pokémon. Please try again later.';
-        return of({ data: [], total: 0, page: 1, limit: 10 });
+        return of({ items: [], total: 0, page: 1, limit: 10, totalPages: 1 });
       }),
       finalize(() => {
         this.isLoading = false;
       })
     ).subscribe(response => {
-      this.pokemons = response.data;
+      this.pokemons = response.items;
     });
   }
 

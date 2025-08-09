@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '@environments/environment';
 
 export interface PokemonStats {
   hp: number;
@@ -36,7 +37,7 @@ export interface PaginatedResponse<T> {
   providedIn: 'root'
 })
 export class PokemonService {
-  private apiUrl = '/api/pokemons';
+  private apiUrl = `${environment.apiUrl}/api/pokemons`;
 
   constructor(private http: HttpClient) {}
 

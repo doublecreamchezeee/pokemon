@@ -15,7 +15,7 @@ interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = `${environment.apiUrl}/auth`;
+  private apiUrl = `${environment.apiUrl}/api/auth`;
 
   private isBrowser: boolean;
 
@@ -64,7 +64,7 @@ export class AuthService {
   }
 
   signup(data: { username: string; password: string }): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/signup`, data).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/api/signup`, data).pipe(
       tap(res => {
         this.authState.login(res.user, res.accessToken);
         if (this.isBrowser) {

@@ -4,64 +4,36 @@
   margin: 0 auto;
 }
 
-.controls {
-  display: flex;
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
-  flex-wrap: wrap;
-  
-  @media (max-width: 600px) {
-    flex-direction: column;
-  }
-}
-
-.search-box {
-  flex: 1;
-  min-width: 200px;
-}
-
-.search-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #e0e0e0;
+  padding: 1.5rem;
+  background: white;
   border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  box-shadow: var(--card-shadow);
 
-  &:focus {
-    outline: none;
-    border-color: var(--primary-color);
+  .speed-filter {
+    display: flex;
+    gap: 1rem;
+    grid-column: 1 / -1;
+
+    mat-form-field {
+      flex: 1;
+    }
   }
-}
 
-.import-box {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.file-input {
-  display: none;
-}
-
-.import-button {
-  padding: 0.75rem 1.5rem;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    filter: brightness(0.9);
+  .checkbox-field {
+    display: flex;
+    align-items: center;
+    height: 48px; // Match height of mat-form-field
   }
-}
 
-.file-name {
-  color: #666;
-  font-size: 0.9rem;
+  button {
+    justify-self: end;
+    align-self: center;
+  }
 }
 
 .pokemon-grid {
@@ -78,48 +50,38 @@
   border-radius: 16px;
   box-shadow: var(--card-shadow);
   margin: 1rem 0;
-}
 
-.loading-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
 }
 
-.loader {
-  width: 48px;
-  height: 48px;
-  border: 4px solid var(--primary-color);
-  border-radius: 50%;
-  border-top-color: transparent;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .error-state {
-  color: #dc3545;
+  color: var(--warn-color);
 
   p {
     margin-bottom: 1rem;
   }
 }
 
-.retry-button {
-  padding: 0.5rem 1rem;
-  background-color: #dc3545;
-  color: white;
-  border: none;
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: white;
   border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  box-shadow: var(--card-shadow);
 
-  &:hover {
-    filter: brightness(0.9);
+  .page-info {
+    min-width: 120px;
+    text-align: center;
+  }
+
+  button {
+    min-width: 100px;
   }
 }

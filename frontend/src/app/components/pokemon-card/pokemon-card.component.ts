@@ -28,4 +28,9 @@ export class PokemonCardComponent implements OnInit {
     event.stopPropagation();
     this.favoritesService.toggleFavorite(this.pokemon).subscribe();
   }
+
+  onImageError(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'assets/images/pokemon-placeholder.png';
+  }
 }

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap, map } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Pokemon } from '../pokemons/pokemon.interface';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { Pokemon } from '../pokemons/pokemon.interface';
 export class FavoritesService {
   private favoritesSubject = new BehaviorSubject<Set<number>>(new Set());
   favorites$ = this.favoritesSubject.asObservable();
-  private apiUrl = '/api/favorites';
+  private apiUrl = `${environment.apiUrl}/api/favorites`;
 
   constructor(
     private http: HttpClient,

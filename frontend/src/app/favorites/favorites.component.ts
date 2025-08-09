@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PokemonCardComponent } from '../components/pokemon-card/pokemon-card.component';
 import { FavoritesService } from './favorites.service';
-import { Pokemon } from '../pokemons/pokemon.service';
+import { Pokemon } from '../pokemons/pokemon.interface';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -47,13 +47,13 @@ export class FavoritesComponent implements OnInit {
     this.favoritesService.getFavorites(this.userId).pipe(
       catchError(error => {
         this.error = 'Failed to load favorites. Please try again later.';
-        return of({ data: [], total: 0 });
+        return of({ items: [], total: 0 });
       }),
       finalize(() => {
         this.isLoading = false;
       })
     ).subscribe(response => {
-      this.favorites = response.data;
+      this.favorites = response.items;
     });
   }
 

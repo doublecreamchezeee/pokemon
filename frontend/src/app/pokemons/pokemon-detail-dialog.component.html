@@ -3,34 +3,34 @@
     <div class="pokemon-header">
       <h2>{{ pokemon.name }}</h2>
       <span class="pokemon-id">#{{ pokemon.id.toString().padStart(3, '0') }}</span>
-    </div>
-
-    <div class="pokemon-image">
-      <img [src]="pokemon.image" [alt]="pokemon.name">
+      <span class="generation-badge">Gen {{ pokemon.generation }}</span>
+      <span class="legendary-badge" *ngIf="pokemon.legendary">Legendary</span>
     </div>
 
     <div class="pokemon-types">
       <span 
-        *ngFor="let type of pokemon.types" 
         class="type-badge"
-        [attr.data-type]="type.toLowerCase()">
-        {{ type }}
+        [attr.data-type]="pokemon.type1.toLowerCase()">
+        {{ pokemon.type1 }}
+      </span>
+      <span 
+        *ngIf="pokemon.type2"
+        class="type-badge"
+        [attr.data-type]="pokemon.type2.toLowerCase()">
+        {{ pokemon.type2 }}
       </span>
     </div>
 
-    <div class="pokemon-info">
-      <div class="info-row" *ngIf="pokemon.height">
-        <span class="label">Height:</span>
-        <span>{{ pokemon.height }} m</span>
+    <div *ngIf="pokemon.ytUrl" class="video-container">
+      <h3>Video Preview</h3>
+      <div class="youtube-embed">
+        <iframe 
+          [src]="pokemon.ytUrl | safeUrl" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
       </div>
-      <div class="info-row" *ngIf="pokemon.weight">
-        <span class="label">Weight:</span>
-        <span>{{ pokemon.weight }} kg</span>
-      </div>
-    </div>
-
-    <div class="pokemon-description" *ngIf="pokemon.description">
-      <p>{{ pokemon.description }}</p>
     </div>
 
     <div class="stats-container">
@@ -38,43 +38,50 @@
       <div class="stat-row">
         <span class="stat-label">HP</span>
         <div class="stat-bar-container">
-          <div class="stat-bar" [style.width.%]="(pokemon.stats.hp / 255) * 100"></div>
-          <span class="stat-value">{{ pokemon.stats.hp }}</span>
+          <div class="stat-bar" [style.width.%]="(pokemon.hp / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.hp }}</span>
         </div>
       </div>
       <div class="stat-row">
         <span class="stat-label">Attack</span>
         <div class="stat-bar-container">
-          <div class="stat-bar" [style.width.%]="(pokemon.stats.attack / 255) * 100"></div>
-          <span class="stat-value">{{ pokemon.stats.attack }}</span>
+          <div class="stat-bar" [style.width.%]="(pokemon.attack / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.attack }}</span>
         </div>
       </div>
       <div class="stat-row">
         <span class="stat-label">Defense</span>
         <div class="stat-bar-container">
-          <div class="stat-bar" [style.width.%]="(pokemon.stats.defense / 255) * 100"></div>
-          <span class="stat-value">{{ pokemon.stats.defense }}</span>
+          <div class="stat-bar" [style.width.%]="(pokemon.defense / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.defense }}</span>
         </div>
       </div>
       <div class="stat-row">
         <span class="stat-label">Sp. Atk</span>
         <div class="stat-bar-container">
-          <div class="stat-bar" [style.width.%]="(pokemon.stats.specialAttack / 255) * 100"></div>
-          <span class="stat-value">{{ pokemon.stats.specialAttack }}</span>
+          <div class="stat-bar" [style.width.%]="(pokemon.spAtk / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.spAtk }}</span>
         </div>
       </div>
       <div class="stat-row">
         <span class="stat-label">Sp. Def</span>
         <div class="stat-bar-container">
-          <div class="stat-bar" [style.width.%]="(pokemon.stats.specialDefense / 255) * 100"></div>
-          <span class="stat-value">{{ pokemon.stats.specialDefense }}</span>
+          <div class="stat-bar" [style.width.%]="(pokemon.spDef / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.spDef }}</span>
         </div>
       </div>
       <div class="stat-row">
         <span class="stat-label">Speed</span>
         <div class="stat-bar-container">
-          <div class="stat-bar" [style.width.%]="(pokemon.stats.speed / 255) * 100"></div>
-          <span class="stat-value">{{ pokemon.stats.speed }}</span>
+          <div class="stat-bar" [style.width.%]="(pokemon.speed / 255) * 100"></div>
+          <span class="stat-value">{{ pokemon.speed }}</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Total</span>
+        <div class="stat-bar-container">
+          <div class="stat-bar total" [style.width.%]="(pokemon.total / 720) * 100"></div>
+          <span class="stat-value">{{ pokemon.total }}</span>
         </div>
       </div>
     </div>

@@ -11,27 +11,57 @@
     </button>
   </div>
 
-  <div class="image-container">
-    <img [src]="pokemon.image" [alt]="pokemon.name" />
+  <div class="pokemon-image">
+    <img [src]="pokemon.image" [alt]="pokemon.name" (error)="onImageError($event)">
   </div>
 
-  <div class="pokemon-info">
-    <h3 class="pokemon-name">{{ pokemon.name }}</h3>
-    
-    <div class="pokemon-stats">
-      <div class="types" *ngIf="pokemon.types?.length">
+  <div class="stats-preview">
+    <div class="stat">
+      <span class="label">ATK</span>
+      <span class="value">{{pokemon.attack}}</span>
+    </div>
+    <div class="stat">
+      <span class="label">DEF</span>
+      <span class="value">{{pokemon.defense}}</span>
+    </div>
+    <div class="stat">
+      <span class="label">SP.A</span>
+      <span class="value">{{pokemon.spAtk}}</span>
+    </div>
+    <div class="stat">
+      <span class="label">SP.D</span>
+      <span class="value">{{pokemon.spDef}}</span>
+    </div>
+  </div>
+
+    <div class="pokemon-info">
+      <h3 class="pokemon-name">{{ pokemon.name }}</h3>
+      <p class="generation">Gen {{pokemon.generation}}</p>    <div class="pokemon-stats">
+      <div class="types">
         <span 
           class="type-badge"
-          *ngFor="let type of pokemon.types"
-          [attr.data-type]="type.toLowerCase()">
-          {{type}}
+          [attr.data-type]="pokemon.type1.toLowerCase()">
+          {{pokemon.type1}}
+        </span>
+        <span 
+          *ngIf="pokemon.type2"
+          class="type-badge"
+          [attr.data-type]="pokemon.type2.toLowerCase()">
+          {{pokemon.type2}}
         </span>
       </div>
       
-      <div class="speed" *ngIf="pokemon.speed !== undefined">
-        <span class="speed-badge">
+      <div class="stats">
+        <span class="stat-badge">
+          HP: {{pokemon.hp}}
+        </span>
+        <span class="stat-badge">
           Speed: {{pokemon.speed}}
         </span>
+      </div>
+
+      <div class="legendary-badge" *ngIf="pokemon.legendary">
+        Legendary
       </div>
     </div>
   </div>

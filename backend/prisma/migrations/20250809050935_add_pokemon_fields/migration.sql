@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "public"."Pokemon" ALTER COLUMN "id" DROP DEFAULT,
+ALTER COLUMN "type2" DROP NOT NULL,
+ALTER COLUMN "legendary" DROP DEFAULT,
+ALTER COLUMN "ytbUrl" DROP NOT NULL;
+DROP SEQUENCE "Pokemon_id_seq";

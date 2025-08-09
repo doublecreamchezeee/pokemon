@@ -1,46 +1,82 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AuthStateService, AuthUser } from './auth-state.service';
+import { environment } from '../../environments/environment.development';
+import { isPlatformBrowser } from '@angular/common';
+
+interface AuthResponse {
+  user: AuthUser;
+  accessToken: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = '/auth';
+  private apiUrl = `${environment.apiUrl}/auth`;
+
+  private isBrowser: boolean;
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private snackBar: MatSnackBar,
-    private authState: AuthStateService
-  ) {}
+    private authState: AuthStateService,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+    
+    // Try to restore session from localStorage only in browser
+    if (this.isBrowser) {
+      const token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      if (token && userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          this.authState.login(user, token);
+        } catch (error) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
+      }
+    }
+  }
 
-  login(credentials: { username: string; password: string }): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials).pipe(
+  login(credentials: { username: string; password: string }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(res => {
-        // Simulate user object, adapt as needed
-        const user: AuthUser = { username: credentials.username };
-        this.authState.login(user, res.token);
-        this.router.navigate(['/']);
+        this.authState.login(res.user, res.accessToken);
+        if (this.isBrowser) {
+          localStorage.setItem('token', res.accessToken);
+          localStorage.setItem('user', JSON.stringify(res.user));
+        }
+        this.router.navigate(['/pokemons']);
+        this.snackBar.open('Login successful!', 'Close', { duration: 3000 });
       }),
       catchError(err => {
-        this.snackBar.open(err.error?.message || 'Login failed', 'Close', { duration: 3000 });
+        const message = err.error?.message || 'Login failed. Please check your credentials.';
+        this.snackBar.open(message, 'Close', { duration: 3000 });
         return throwError(() => err);
       })
     );
   }
 
-  signup(data: { username: string; password: string }): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/signup`, data).pipe(
+  signup(data: { username: string; password: string }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/signup`, data).pipe(
       tap(res => {
-        const user: AuthUser = { username: data.username };
-        this.authState.login(user, res.token);
-        this.router.navigate(['/']);
+        this.authState.login(res.user, res.accessToken);
+        if (this.isBrowser) {
+          localStorage.setItem('token', res.accessToken);
+          localStorage.setItem('user', JSON.stringify(res.user));
+        }
+        this.router.navigate(['/pokemons']);
+        this.snackBar.open('Registration successful!', 'Close', { duration: 3000 });
       }),
       catchError(err => {
-        this.snackBar.open(err.error?.message || 'Signup failed', 'Close', { duration: 3000 });
+        const message = err.error?.message || 'Registration failed. Please try again.';
+        this.snackBar.open(message, 'Close', { duration: 3000 });
         return throwError(() => err);
       })
     );
@@ -48,6 +84,22 @@ export class AuthService {
 
   logout() {
     this.authState.logout();
+    if (this.isBrowser) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
     this.router.navigate(['/login']);
+    this.snackBar.open('You have been logged out', 'Close', { duration: 3000 });
+  }
+
+  getCurrentUser(): Observable<AuthUser> {
+    return this.http.get<AuthUser>(`${this.apiUrl}/me`).pipe(
+      catchError(err => {
+        if (err.status === 401) {
+          this.logout();
+        }
+        return throwError(() => err);
+      })
+    );
   }
 }

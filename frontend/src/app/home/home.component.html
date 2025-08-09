@@ -4,18 +4,13 @@
     <p>Discover and explore your favorite Pokémon</p>
   </section>
 
-  <!-- <section class="featured-section">
+  <section class="featured-section">
     <h2>Featured Videos</h2>
-    <div class="carousel-container">
-      <div class="carousel">
-        <ng-container *ngFor="let video of youtubeVideos">
-          <div class="video-wrapper">
-            <iframe [src]="video | safeUrl" frameborder="0" allowfullscreen></iframe>
-          </div>
-        </ng-container>
-      </div>
-    </div>
-  </section> -->
+    <app-video-carousel 
+      [pokemons]="featuredPokemons"
+      [videos]="featuredPokemons.length === 0 ? youtubeVideos : []">
+    </app-video-carousel>
+  </section>
 
   <section class="pokemon-section">
     <div class="section-header">

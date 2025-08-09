@@ -28,6 +28,26 @@
 }
 
 .featured-section, .pokemon-section {
+  margin-bottom: 4rem;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: var(--text-color);
+    text-align: center;
+    font-weight: 600;
+  }
+}
+
+.featured-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.pokemon-section {
   .section-header {
     display: flex;
     justify-content: space-between;
@@ -36,16 +56,8 @@
 
     h2 {
       margin: 0;
+      text-align: left;
     }
-  }
-  margin-bottom: 4rem;
-
-  h2 {
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
-    color: var(--text-color);
-    text-align: center;
-    font-weight: 600;
   }
 }
 

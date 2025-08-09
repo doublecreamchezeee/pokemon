@@ -1,0 +1,2 @@
+"id","name","type1","type2","total","hp","attack","defense","spAttack","spDefense","speed","generation","legendary","image","ytbUrl"
+10002,"Pokemon-100002","Dark","Water",474,209,241,102,22,202,140,6,false,"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png","https://youtu.be/uBYORdr_TY8"

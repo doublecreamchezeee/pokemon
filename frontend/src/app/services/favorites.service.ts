@@ -83,4 +83,8 @@ export class FavoritesService {
       })
     );
   }
+
+  getFavoritesWithDetails(): Observable<{ items: Pokemon[]; total: number }> {
+    return this.http.get<{ items: Pokemon[]; total: number }>(`${this.apiUrl}/users/me`);
+  }
 }

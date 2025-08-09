@@ -47,6 +47,20 @@ export class FavoritesController {
   }
 
   /**
+   * Gets favorites for the currently authenticated user.
+   */
+  @Get('users/me')
+  async getMyFavorites(
+    @Request() req: RequestWithUser,
+  ): Promise<FavoritesResponse> {
+    return this.favoritesService.getUserFavorites(
+      req.user.id,
+      req.user.id,
+      false,
+    );
+  }
+  
+  /**
    * Gets all favorites for a user.
    * Regular users can only view their own favorites.
    * Admins can view any user's favorites.
@@ -63,17 +77,4 @@ export class FavoritesController {
     );
   }
 
-  /**
-   * Gets favorites for the currently authenticated user.
-   */
-  @Get('users/me')
-  async getMyFavorites(
-    @Request() req: RequestWithUser,
-  ): Promise<FavoritesResponse> {
-    return this.favoritesService.getUserFavorites(
-      req.user.id,
-      req.user.id,
-      false,
-    );
-  }
 }

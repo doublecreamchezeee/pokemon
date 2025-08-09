@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PokemonCardComponent } from '../components/pokemon-card/pokemon-card.component';
-import { FavoritesService } from './favorites.service';
+import { FavoritesService } from '../services/favorites.service';
 import { Pokemon } from '../pokemons/pokemon.interface';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -27,8 +27,6 @@ export class FavoritesComponent implements OnInit {
   favorites: Pokemon[] = [];
   isLoading = true;
   error: string | null = null;
-  // TODO: Get actual user ID from auth service
-  userId = '1';
 
   constructor(
     private favoritesService: FavoritesService,
@@ -38,21 +36,27 @@ export class FavoritesComponent implements OnInit {
 
   ngOnInit() {
     this.loadFavorites();
+    
+    // Subscribe to favorites changes to update the list when items are removed
+    this.favoritesService.favorites$.subscribe(favorites => {
+      if (!this.isLoading) {
+        // Filter out items that are no longer in favorites
+        this.favorites = this.favorites.filter(pokemon => favorites.has(pokemon.id));
+      }
+    });
   }
 
   loadFavorites() {
     this.isLoading = true;
     this.error = null;
 
-    this.favoritesService.getFavorites(this.userId).pipe(
+    this.favoritesService.getFavoritesWithDetails().pipe(
+      finalize(() => this.isLoading = false),
       catchError(error => {
-        this.error = 'Failed to load favorites. Please try again later.';
-        return of({ items: [], total: 0 });
-      }),
-      finalize(() => {
-        this.isLoading = false;
+        this.error = 'Failed to load favorites';
+        return of({items: [], total: 0});
       })
-    ).subscribe(response => {
+    ).subscribe((response: { items: Pokemon[]; total: number }) => {
       this.favorites = response.items;
     });
   }
@@ -66,13 +70,12 @@ export class FavoritesComponent implements OnInit {
     });
   }
 
+  trackByPokemonId(index: number, pokemon: Pokemon): number {
+    return pokemon.id;
+  }
+
   removeFavorite(pokemon: Pokemon) {
-    this.isLoading = true;
-    this.favoritesService.removeFavorite(pokemon.id).pipe(
-      finalize(() => {
-        this.isLoading = false;
-      })
-    ).subscribe({
+    this.favoritesService.toggleFavorite(pokemon).subscribe({
       next: () => {
         this.favorites = this.favorites.filter(p => p.id !== pokemon.id);
         this.snackBar.open(`Removed ${pokemon.name} from favorites`, 'Close', {

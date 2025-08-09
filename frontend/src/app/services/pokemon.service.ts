@@ -96,6 +96,22 @@ export class PokemonService {
     );
   }
 
+  importCsv(file: File): Observable<{ imported: number; message: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    return this.http.post<{ imported: number; message: string }>(
+      `${this.apiUrl}/import`, 
+      formData
+    ).pipe(
+      tap(() => {
+        // Clear cache after successful import
+        this.clearCache();
+      }),
+      catchError(this.handleError)
+    );
+  }
+
   clearCache(): void {
     this.cache.clear();
   }

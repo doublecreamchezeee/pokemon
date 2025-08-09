@@ -19,6 +19,7 @@ export class PokemonCardComponent implements OnInit {
   constructor(private favoritesService: FavoritesService) {}
 
   ngOnInit() {
+    // Subscribe to favorites changes and update the favorite state
     this.favoritesService.favorites$.subscribe(favorites => {
       this.isFavorite = favorites.has(this.pokemon.id);
     });
@@ -26,7 +27,15 @@ export class PokemonCardComponent implements OnInit {
 
   onFavoriteClick(event: Event): void {
     event.stopPropagation();
-    this.favoritesService.toggleFavorite(this.pokemon).subscribe();
+    
+    this.favoritesService.toggleFavorite(this.pokemon).subscribe({
+      next: () => {
+        // The subscription to favorites$ will handle the UI update
+      },
+      error: (error) => {
+        console.error('Error toggling favorite:', error);
+      }
+    });
   }
 
   onImageError(event: Event): void {

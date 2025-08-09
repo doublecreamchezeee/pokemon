@@ -13,6 +13,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { PokemonDetailDialogComponent } from './pokemon-detail-dialog.component';
 
 @Component({
@@ -28,7 +32,11 @@ import { PokemonDetailDialogComponent } from './pokemon-detail-dialog.component'
     MatSelectModule,
     MatCheckboxModule,
     MatSliderModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatSnackBarModule,
+    MatIconModule,
+    MatTooltipModule
   ],
   templateUrl: './pokemon-list.component.html',
   styleUrls: ['./pokemon-list.component.scss']
@@ -42,6 +50,8 @@ export class PokemonListComponent implements OnInit {
   totalPages = 0;
   total = 0;
   filterForm: FormGroup;
+  isImporting = false;
+  pageSizeOptions = [10, 20, 50, 100];
   private destroy$ = new Subject<void>();
 
   typeOptions = [
@@ -53,7 +63,8 @@ export class PokemonListComponent implements OnInit {
   constructor(
     private pokemonService: PokemonService,
     private dialog: MatDialog,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private snackBar: MatSnackBar
   ) {
     this.filterForm = this.fb.group({
       name: [''],
@@ -137,5 +148,59 @@ export class PokemonListComponent implements OnInit {
       minSpeed: null,
       maxSpeed: null
     });
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.importCsv(file);
+    }
+  }
+
+  importCsv(file: File): void {
+    if (!file.name.endsWith('.csv')) {
+      this.snackBar.open('Please select a CSV file', 'Close', { duration: 3000 });
+      return;
+    }
+
+    this.isImporting = true;
+    this.pokemonService.importCsv(file).subscribe({
+      next: (response: { imported: number; message: string }) => {
+        this.snackBar.open(response.message, 'Close', { 
+          duration: 5000,
+          panelClass: ['success-snackbar']
+        });
+        this.loadPokemons(); // Reload the list
+      },
+      error: (error: any) => {
+        console.error('Import error:', error);
+        const message = error.error?.message || 'Failed to import CSV file';
+        this.snackBar.open(message, 'Close', { 
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
+      },
+      complete: () => {
+        this.isImporting = false;
+        // Clear the file input
+        const fileInput = document.getElementById('csv-file-input') as HTMLInputElement;
+        if (fileInput) {
+          fileInput.value = '';
+        }
+      }
+    });
+  }
+
+  triggerFileInput(): void {
+    const fileInput = document.getElementById('csv-file-input');
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+
+  onPageSizeChange(newPageSize: number): void {
+    this.pageSize = newPageSize;
+    this.currentPage = 1; // Reset to first page
+    this.loadPokemons();
   }
 }

@@ -16,11 +16,10 @@
   <ng-container *ngIf="!isLoading && !error">
     <div *ngIf="favorites.length > 0; else noFavorites" class="favorites-grid">
       <app-pokemon-card
-        *ngFor="let pokemon of favorites"
+        *ngFor="let pokemon of favorites; trackBy: trackByPokemonId"
         [pokemon]="pokemon"
         [showFavorite]="true"
-        (click)="openPokemonDetails(pokemon)"
-        (favoriteToggle)="removeFavorite(pokemon)">
+        (click)="openPokemonDetails(pokemon)">
       </app-pokemon-card>
     </div>
 

@@ -1,38 +1,67 @@
 <div class="pokemon-list-container">
-  <form [formGroup]="filterForm" class="filters">
-    <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="name" placeholder="Search by name...">
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Type</mat-label>
-      <mat-select formControlName="type">
-        <mat-option value="">All Types</mat-option>
-        <mat-option *ngFor="let type of typeOptions" [value]="type">
-          {{type}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <div class="checkbox-field">
-      <mat-checkbox formControlName="legendary">Legendary</mat-checkbox>
-    </div>
-
-    <div class="speed-filter">
+  <div class="header-section">
+    <form [formGroup]="filterForm" class="filters">
       <mat-form-field>
-        <mat-label>Min Speed</mat-label>
-        <input matInput type="number" formControlName="minSpeed">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" placeholder="Search by name...">
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Max Speed</mat-label>
-        <input matInput type="number" formControlName="maxSpeed">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option value="">All Types</mat-option>
+          <mat-option *ngFor="let type of typeOptions" [value]="type">
+            {{type}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
-    </div>
 
-    <button mat-button (click)="resetFilters()">Reset Filters</button>
-  </form>
+      <div class="checkbox-field">
+        <mat-checkbox formControlName="legendary">Legendary</mat-checkbox>
+      </div>
+
+      <div class="speed-filter">
+        <mat-form-field>
+          <mat-label>Min Speed</mat-label>
+          <input matInput type="number" formControlName="minSpeed">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Max Speed</mat-label>
+          <input matInput type="number" formControlName="maxSpeed">
+        </mat-form-field>
+      </div>
+
+      <button mat-button (click)="resetFilters()">Reset Filters</button>
+    </form>
+
+    <div class="import-section">
+      <div class="import-content">
+        <h3 class="import-title">Import Pokemon Data</h3>
+        <p class="import-description">Upload a CSV file to import Pokemon data</p>
+        <input 
+          type="file" 
+          id="csv-file-input" 
+          accept=".csv" 
+          (change)="onFileSelected($event)"
+          style="display: none;">
+        <button 
+          class="import-button"
+          mat-raised-button 
+          color="accent" 
+          (click)="triggerFileInput()"
+          [disabled]="isImporting"
+          matTooltip="Upload CSV file with Pokemon data"
+          matTooltipPosition="below">
+          <mat-icon class="import-icon">upload_file</mat-icon>
+          <span class="import-text">{{isImporting ? 'Importing...' : 'Import CSV'}}</span>
+          <div class="import-spinner" *ngIf="isImporting">
+            <mat-spinner diameter="20"></mat-spinner>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <div *ngIf="isLoading" class="loading-state">
     <mat-spinner></mat-spinner>
@@ -53,18 +82,31 @@
   </div>
 
   <div class="pagination" *ngIf="!isLoading && !error && totalPages > 1">
-    <button mat-button 
-      [disabled]="currentPage === 1"
-      (click)="previousPage()">
-      Previous
-    </button>
-    <span class="page-info">
-      Page {{currentPage}} of {{totalPages}}
-    </span>
-    <button mat-button 
-      [disabled]="currentPage === totalPages"
-      (click)="nextPage()">
-      Next
-    </button>
+    <div class="pagination-controls">
+      <button mat-button 
+        [disabled]="currentPage === 1"
+        (click)="previousPage()">
+        Previous
+      </button>
+      <span class="page-info">
+        Page {{currentPage}} of {{totalPages}} ({{total}} total)
+      </span>
+      <button mat-button 
+        [disabled]="currentPage === totalPages"
+        (click)="nextPage()">
+        Next
+      </button>
+    </div>
+    
+    <div class="page-size-selector">
+      <mat-form-field>
+        <mat-label>Items per page</mat-label>
+        <mat-select [value]="pageSize" (selectionChange)="onPageSizeChange($event.value)">
+          <mat-option *ngFor="let size of pageSizeOptions" [value]="size">
+            {{size}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 </div>

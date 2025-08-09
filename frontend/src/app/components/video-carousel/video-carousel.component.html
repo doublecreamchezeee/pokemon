@@ -1,0 +1,47 @@
+<div class="video-carousel" *ngIf="hasVideos">
+  <div class="carousel-container">
+    <button class="carousel-btn prev-btn" (click)="prevVideo()" [disabled]="videoItems.length <= 1">
+      <span>‹</span>
+    </button>
+    
+    <div class="video-wrapper">
+      <iframe 
+        *ngIf="currentVideoItem"
+        [src]="currentVideoItem.embedUrl | safeUrl" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+      
+      <!-- Display Pokemon info overlay -->
+      <div class="video-info" *ngIf="currentVideoItem && currentVideoItem.pokemon.name !== 'Video 1'">
+        <h3>{{ currentVideoItem.pokemon.name }}</h3>
+        <div class="pokemon-types">
+          <span class="type-badge" [attr.data-type]="currentVideoItem.pokemon.type1.toLowerCase()">
+            {{ currentVideoItem.pokemon.type1 }}
+          </span>
+          <span 
+            *ngIf="currentVideoItem.pokemon.type2"
+            class="type-badge" 
+            [attr.data-type]="currentVideoItem.pokemon.type2.toLowerCase()">
+            {{ currentVideoItem.pokemon.type2 }}
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <button class="carousel-btn next-btn" (click)="nextVideo()" [disabled]="videoItems.length <= 1">
+      <span>›</span>
+    </button>
+  </div>
+  
+  <div class="carousel-indicators" *ngIf="videoItems.length > 1">
+    <button 
+      *ngFor="let videoItem of videoItems; let i = index"
+      class="indicator"
+      [class.active]="i === currentIndex"
+      (click)="goToVideo(i)"
+      [title]="videoItem.pokemon.name">
+    </button>
+  </div>
+</div>

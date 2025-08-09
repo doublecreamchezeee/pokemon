@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PokemonCardComponent } from '../components/pokemon-card/pokemon-card.component';
+import { VideoCarouselComponent } from '../components/video-carousel/video-carousel.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,6 +19,7 @@ import { PokemonDetailDialogComponent } from '../pokemons/pokemon-detail-dialog.
     CommonModule,
     RouterModule,
     PokemonCardComponent,
+    VideoCarouselComponent,
     MatGridListModule,
     MatButtonModule
   ],
@@ -30,9 +32,10 @@ export class HomeComponent implements OnInit {
     'https://www.youtube.com/embed/uBYORdr_TY8',
     'https://www.youtube.com/embed/8r7Jk6zT1dE',
     'https://www.youtube.com/embed/rg6CiPI6h2g'
-  ];
+  ]; // Already limited to 4 videos
 
   pokemons: Pokemon[] = [];
+  featuredPokemons: Pokemon[] = []; // Pokemon with YouTube videos (max 4)
   isLoading = true;
   error: string | null = null;
   favoritePokemons: Set<number> = new Set();
@@ -51,6 +54,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.loadPokemons();
+    this.loadFeaturedPokemons();
   }
 
   loadPokemons() {
@@ -67,6 +71,21 @@ export class HomeComponent implements OnInit {
       })
     ).subscribe(response => {
       this.pokemons = response.items;
+    });
+  }
+
+  loadFeaturedPokemons() {
+    // Load a smaller set and filter for Pokemon with YouTube videos
+    this.pokemonService.getPokemons(1, 20).pipe(
+      catchError(error => {
+        console.error('Failed to load featured Pokemon:', error);
+        return of({ items: [], total: 0, page: 1, limit: 20, totalPages: 1 });
+      })
+    ).subscribe(response => {
+      // Filter Pokemon that have YouTube URLs and limit to 4
+      this.featuredPokemons = response.items
+        .filter(pokemon => pokemon.ytUrl)
+        .slice(0, 4);
     });
   }
 

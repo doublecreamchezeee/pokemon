@@ -105,4 +105,55 @@ export class PokemonsService {
       ...(item.ytbUrl && { ytUrl: item.ytbUrl })
     };
   }
+
+  async importFromCsv(buffer: Buffer): Promise<{ imported: number; message: string }> {
+    const csvContent = buffer.toString('utf-8');
+    const lines = csvContent.split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
+    
+    let importedCount = 0;
+    
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+      
+      const values = line.split(',').map(v => v.trim());
+      if (values.length < headers.length) continue;
+      
+      try {
+        const pokemonData = {
+          id: parseInt(values[0]),
+          name: values[1]?.replace(/"/g, ''),
+          type1: values[2]?.replace(/"/g, ''),
+          type2: values[3]?.replace(/"/g, '') || null,
+          total: parseInt(values[4]) || 0,
+          hp: parseInt(values[5]) || 0,
+          attack: parseInt(values[6]) || 0,
+          defense: parseInt(values[7]) || 0,
+          spAttack: parseInt(values[8]) || 0,
+          spDefense: parseInt(values[9]) || 0,
+          speed: parseInt(values[10]) || 0,
+          generation: parseInt(values[11]) || 1,
+          legendary: values[12]?.toLowerCase() === 'true',
+          image: values[13]?.replace(/"/g, '') || null,
+          ytbUrl: values[14]?.replace(/"/g, '') || null,
+        };
+
+        await this.prisma.pokemon.upsert({
+          where: { id: pokemonData.id },
+          update: pokemonData,
+          create: pokemonData,
+        });
+        
+        importedCount++;
+      } catch (error) {
+        console.error(`Error importing Pokemon at line ${i + 1}:`, error);
+      }
+    }
+    
+    return {
+      imported: importedCount,
+      message: `Successfully imported ${importedCount} Pokemon`
+    };
+  }
 }

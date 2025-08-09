@@ -18,7 +18,10 @@
   </section> -->
 
   <section class="pokemon-section">
-    <h2>Pokémon Collection</h2>
+    <div class="section-header">
+      <h2>Pokémon Collection</h2>
+      <a mat-button color="primary" routerLink="/pokemons">See All</a>
+    </div>
     
     <div *ngIf="isLoading" class="loading-state">
       <div class="loader"></div>
@@ -35,8 +38,7 @@
         *ngFor="let p of pokemons"
         [pokemon]="p"
         [showFavorite]="true"
-        (click)="openPokemonDetails(p)"
-        (favoriteToggle)="toggleFavorite(p)">
+        (click)="openPokemonDialog(p)">
       </app-pokemon-card>
     </div>
   </section>

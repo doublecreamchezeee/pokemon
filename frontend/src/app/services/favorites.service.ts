@@ -21,9 +21,10 @@ export class FavoritesService {
   }
 
   private loadFavorites() {
-    this.http.get<Pokemon[]>(this.apiUrl).pipe(
-      tap(pokemons => {
-        const favoriteIds = new Set(pokemons.map(p => p.id));
+    // Get current user's favorites
+    this.http.get<{ items: Pokemon[]; total: number }>(`${this.apiUrl}/users/me`).pipe(
+      tap(response => {
+        const favoriteIds = new Set(response.items.map(p => p.id));
         this.favoritesSubject.next(favoriteIds);
       })
     ).subscribe();
@@ -49,7 +50,7 @@ export class FavoritesService {
 
     const request = isFavorite
       ? this.http.delete<void>(`${this.apiUrl}/${pokemon.id}`)
-      : this.http.post<void>(this.apiUrl, pokemon);
+      : this.http.post<void>(`${this.apiUrl}/${pokemon.id}`, {});
 
     return request.pipe(
       tap({
@@ -68,7 +69,14 @@ export class FavoritesService {
           }
           this.favoritesSubject.next(newFavorites);
           
-          this.snackBar.open('Failed to update favorites', 'Close', { 
+          let errorMessage = 'Failed to update favorites';
+          if (error.status === 409) {
+            errorMessage = 'Pokemon is already in favorites';
+          } else if (error.status === 404) {
+            errorMessage = 'Pokemon not found in favorites';
+          }
+          
+          this.snackBar.open(errorMessage, 'Close', { 
             duration: 3000 
           });
         }

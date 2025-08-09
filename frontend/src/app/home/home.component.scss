@@ -28,6 +28,16 @@
 }
 
 .featured-section, .pokemon-section {
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h2 {
+      margin: 0;
+    }
+  }
   margin-bottom: 4rem;
 
   h2 {

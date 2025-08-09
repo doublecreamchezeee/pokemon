@@ -1,16 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { PokemonCardComponent } from '../components/pokemon-card/pokemon-card.component';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 
 import { PokemonService, Pokemon } from '../services/pokemon.service';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { PokemonDetailDialogComponent } from '../pokemons/pokemon-detail-dialog.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, PokemonCardComponent, MatGridListModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    PokemonCardComponent,
+    MatGridListModule,
+    MatButtonModule
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
@@ -27,7 +37,17 @@ export class HomeComponent implements OnInit {
   error: string | null = null;
   favoritePokemons: Set<number> = new Set();
 
-  constructor(private pokemonService: PokemonService) {}
+  constructor(
+    private pokemonService: PokemonService,
+    private dialog: MatDialog
+  ) {}
+
+  openPokemonDialog(pokemon: Pokemon): void {
+    this.dialog.open(PokemonDetailDialogComponent, {
+      data: { id: pokemon.id },
+      panelClass: 'pokemon-dialog'
+    });
+  }
 
   ngOnInit() {
     this.loadPokemons();

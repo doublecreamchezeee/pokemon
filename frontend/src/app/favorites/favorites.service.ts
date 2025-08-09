@@ -18,7 +18,7 @@ export class FavoritesService {
   constructor(private http: HttpClient) {}
 
   getFavorites(userId: string): Observable<FavoriteResponse> {
-    return this.http.get<FavoriteResponse>(`${this.apiUrl}/users/${userId}/favorites`);
+    return this.http.get<FavoriteResponse>(`${this.apiUrl}/favorites/users/${userId}`);
   }
 
   removeFavorite(id: number): Observable<void> {

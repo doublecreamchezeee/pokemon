@@ -13,13 +13,6 @@
       </div>
 
       <div class="header-right">
-        <div class="search-bar hide-mobile">
-          <mat-form-field appearance="outline">
-            <mat-icon matPrefix>search</mat-icon>
-            <input matInput placeholder="Search Pokémon...">
-          </mat-form-field>
-        </div>
-
         <ng-container *ngIf="(isAuthenticated$ | async) && (currentUser$ | async) as user">
           <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
             <img [src]="'assets/images/default-avatar.png'" alt="User Avatar" class="user-avatar">
@@ -72,22 +65,6 @@
       <a mat-list-item routerLink="/favorites" routerLinkActive="active-link" class="nav-item">
         <mat-icon>favorite</mat-icon>
         <span>Favorites</span>
-      </a>
-      <a mat-list-item routerLink="/profile" routerLinkActive="active-link" class="nav-item">
-        <mat-icon>account_circle</mat-icon>
-        <span>Profile</span>
-      </a>
-
-      <mat-divider></mat-divider>
-
-      <div class="nav-section-title">Discover</div>
-      <a mat-list-item routerLink="/types" routerLinkActive="active-link" class="nav-item">
-        <mat-icon>category</mat-icon>
-        <span>Pokemon Types</span>
-      </a>
-      <a mat-list-item routerLink="/regions" routerLinkActive="active-link" class="nav-item">
-        <mat-icon>public</mat-icon>
-        <span>Regions</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>

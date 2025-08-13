@@ -35,7 +35,7 @@
       <button mat-button (click)="resetFilters()">Reset Filters</button>
     </form>
 
-    <div class="import-section">
+    <div class="import-section" *ngIf="isAuthenticated$ | async">
       <div class="import-content">
         <h3 class="import-title">Import Pokemon Data</h3>
         <p class="import-description">Upload a CSV file to import Pokemon data</p>

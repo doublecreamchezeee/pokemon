@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Pokemon } from './pokemon.interface';
 import { PokemonService, PokemonFilters } from '../services/pokemon.service';
+import { AuthStateService } from '../services/auth-state.service';
 import { PokemonCardComponent } from '../components/pokemon-card/pokemon-card.component';
 import { catchError, finalize, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { of, Subject } from 'rxjs';
+import { of, Subject, Observable } from 'rxjs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -52,6 +53,7 @@ export class PokemonListComponent implements OnInit {
   filterForm: FormGroup;
   isImporting = false;
   pageSizeOptions = [10, 20, 50, 100];
+  isAuthenticated$: Observable<boolean>;
   private destroy$ = new Subject<void>();
 
   typeOptions = [
@@ -64,7 +66,8 @@ export class PokemonListComponent implements OnInit {
     private pokemonService: PokemonService,
     private dialog: MatDialog,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authState: AuthStateService
   ) {
     this.filterForm = this.fb.group({
       name: [''],
@@ -73,6 +76,8 @@ export class PokemonListComponent implements OnInit {
       minSpeed: [null],
       maxSpeed: [null]
     });
+    
+    this.isAuthenticated$ = this.authState.isAuthenticated$;
   }
 
   ngOnInit() {

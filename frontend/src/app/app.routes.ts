@@ -12,6 +12,6 @@ export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'pokemons', component: PokemonsComponent, canActivate: [AuthGuard] },
+  { path: 'pokemons', component: PokemonsComponent },
   { path: 'favorites', component: FavoritesComponent, canActivate: [AuthGuard] }
 ];

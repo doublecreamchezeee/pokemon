@@ -1,10 +1,8 @@
-import { Controller, Get, Param, ParseIntPipe, Query, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query, ValidationPipe } from '@nestjs/common';
 import { PokemonsService } from './pokemons.service';
 import { PokemonsQueryDto } from './dto/pokemons-query.dto';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @Controller('pokemons')
-@UseGuards(JwtAuthGuard)
 export class PokemonsController {
   constructor(private readonly pokemonsService: PokemonsService) {}
 
